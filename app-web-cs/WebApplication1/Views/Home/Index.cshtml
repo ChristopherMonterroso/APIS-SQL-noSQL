@@ -1,0 +1,50 @@
+﻿@model List<WebApplication1.Models.Producto>
+
+@{
+    ViewBag.Title = "Productos Vendidos 2019";
+    var categorias = ViewBag.Categorias as List<WebApplication1.Models.Categoria>;
+    var seleccionada = ViewBag.CategoriaSeleccionada as int?;
+}
+
+<h2>Filtrar productos vendidos en 2019</h2>
+
+<form method="get" asp-action="Index" asp-controller="Home">
+    <label for="categoriaId">Categoría:</label>
+    <select name="categoriaId" id="categoriaId" class="form-control" style="max-width: 300px;">
+        <option value="">-- Selecciona una categoría --</option>
+        @foreach (var cat in categorias)
+        {
+            @: <option value="@cat.IdCategoria" @(cat.IdCategoria == seleccionada ? "selected=\"selected\"" : "")>@cat.NombreCategoria</option>
+        }
+
+}
+
+    </select>
+    <button type="submit" class="btn btn-primary mt-2">Buscar</button>
+</form>
+
+@if (Model != null && Model.Any())
+{
+    <h3 class="mt-4">Productos vendidos:</h3>
+    <table class="table table-bordered table-striped mt-3" style="max-width: 500px;">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nombre del Producto</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <tr>
+                    <td>@(i + 1)</td>
+                    <td>@Model[i].NombreProducto</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else if (seleccionada.HasValue)
+{
+    <p class="mt-4">No hay productos vendidos en esa categoría en 2019.</p>
+}
